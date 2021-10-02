@@ -77,12 +77,17 @@ export const getUserActivity = async (userID, accessToken) => {
 
 export const createUser = async (userID, user) => {
   try {
-	// Add a new document with a generated id
-	//const newUser = doc(collection(db, userID));
-	//const docRef = await setDoc(newUser, user);
-	
 	await setDoc(doc(db, "avengers-challenge/2021/users", ""+userID), user);
-    console.log("Document written with ID: ");
+    console.log("User Document written with ID: ");
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+export const createActivities = async (userID, activites) => {
+  try {
+	await setDoc(doc(db, "avengers-challenge/2021/activites", ""+userID), activites);
+    console.log("User Activites created: ");
   } catch (e) {
     console.error("Error adding document: ", e);
   }

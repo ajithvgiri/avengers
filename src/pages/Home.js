@@ -3,10 +3,10 @@ import "./css/homev2.css";
 import logo from './images/logo.svg';
 import stravaButton from './images/strava-connect.svg';
 const { REACT_APP_CLIENT_ID } = process.env;
-const redirectUrl = "https://fortpedallerspalakkad.web.app/redirect";
+const redirectUrl = "https://localhost:3000/redirect";
 
 const handleLogin = () => {
-  window.location = `http://www.strava.com/oauth/authorize?client_id=${REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=activity:read,activity:write`;
+  window.location = `http://www.strava.com/oauth/authorize?client_id=${REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=activity:read`;
 };
 
 const Home = () => {

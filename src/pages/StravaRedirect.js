@@ -9,6 +9,7 @@ import {
     getUserData,
 	getUserActivity,
 	createUser,
+  createActivities,
 } from "../utils/functions";
 
 class StravaRedirect extends React.Component {
@@ -34,6 +35,7 @@ class StravaRedirect extends React.Component {
                 const user = await getUserData(userID, accessToken);
 				const userActivities = await getUserActivity(userID, accessToken);
 				await createUser(userID,tokens.athlete)
+        await createActivities(userID,userActivities.data[0])
 				this.props.setActivities(userActivities);
                 this.props.setUserActivities(user);
 
