@@ -16,7 +16,16 @@ const setUserActivitiesReducer = (user = null, action) => {
     return user;
 };
 
+const setActivitiesReducer = (activity = null, action) => {
+	console.log("action type"+action.type);
+    if (action.type === "SET_ACTIVITIES") {
+        return action.payload;
+    }
+    return activity;
+};
+
 export default combineReducers({
     returnTokens: setUserReducer,
     user: setUserActivitiesReducer,
+	activity: setActivitiesReducer
 });
