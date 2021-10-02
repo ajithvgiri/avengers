@@ -35,7 +35,7 @@ jobs:
         run: npm run build
         
       - name: Deploy Firebase Site
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "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"
           firebaseServiceAccount: "firebase-adminsdk-mbw55@fort-pedallers-palakkad.iam.gserviceaccount.com"
