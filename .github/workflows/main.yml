@@ -13,28 +13,41 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Install all react packages
-      - name: Install React Packages
-        run: npm install
-
-      # Build react project using npm
-      #Builds the app for production to the `build` folder.cIt correctly bundles React in production mode and optimizes the build for the best performance.
-      - name: Build React Project
+      name: Clone repository
+        uses: actions/checkout@v2
+        name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+        name: Install dependencies
+        run: npm install    
+        name: Test
+        run: npm test
+        name: Generate build
         run: npm run build
+      # Share artifact inside workflow
+        name: Share artifact inside workflow
+        uses: actions/upload-artifact@v1
+        with:
+          name: react-github-actions-build
+          path: build
+  deploy:
+    runs-on: ubuntu-latest
+    # When application is successfully tested and build has been generated
+    # Then we can start with deployment
+    needs: build
+    steps:
+      # Download previously shared build
+        name: Get artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: react-github-actions-build
         
-      - name: Deploy Firebase Site
+        name: Deploy Firebase Site
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "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"
