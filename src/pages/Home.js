@@ -1,5 +1,5 @@
 import React from "react";
-import 'home.css';
+import "./css/home.css";
 const { REACT_APP_CLIENT_ID } = process.env;
 const redirectUrl = "https://fortpedallerspalakkad.web.app/redirect";
 
@@ -10,6 +10,7 @@ const handleLogin = () => {
 const Home = () => {
   return (
     <div class="wrap">
+      <img onClick={handleLogin} class="strava-connect" />
       <div class="inner">
         <div class="trees">
           <div class="left">
@@ -115,7 +116,6 @@ const Home = () => {
               <div class="handle"></div>
             </div>
           </div>
-          <button onClick={handleLogin}>Connect with Strava</button>
         </div>
       </div>
     </div>
