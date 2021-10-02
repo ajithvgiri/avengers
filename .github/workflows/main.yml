@@ -35,15 +35,10 @@ jobs:
         run: npm run build
         
       - name: Deploy Firebase Site
-      # You may pin to the exact commit or the version.
-      # uses: danielmillan/pipelines-firebase-hosting@8a7c15d150288fde37efe3edb186e5bb5931c3de
-      uses: danielmillan/pipelines-firebase-hosting@1.0.8
-      with:
-      # Token generated to authenticate in firebase
-      firebase-token: AAAAZ_oX1Dc:APA91bEN1XyDfo6rz7XKnXT4aNXQY77ntuVsxA6RBvUaDuOYVoeqrKiItvyN0weNxstovUEjWgLONZhk_slPEQL2WrEiL3xBX2pBCRT5LSWgWKrtC4-yVAkdHKp9yu6Il18UaCvxrdZp
-      # Name of the folder containing the resources to be deployed
-      resources-name: build
-      # Firebase project name
-      project-name: Fort Pedallers Palakkad
-      # Target name if you need to deploy to a specific instance
-      target-name: fortpedallerspalakkad
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "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"
+          firebaseServiceAccount: "firebase-adminsdk-mbw55@fort-pedallers-palakkad.iam.gserviceaccount.com"
+          projectId: fort-pedallers-palakkad
+          channelId: live
+          
