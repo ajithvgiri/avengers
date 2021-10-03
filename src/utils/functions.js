@@ -2,7 +2,7 @@ import axios from "axios";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, writeBatch, query, where, getDocs  } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -66,7 +66,7 @@ export const getUserData = async (userID, accessToken) => {
 export const getUserActivity = async (userID, accessToken) => {
   try {
     const response = await axios.get(
-      `https://www.strava.com/api/v3/athlete/activities`,
+      `https://www.strava.com/api/v3/athlete/activities?after=1632960000`, // 1632960000 => 1st Oct 2021
       { headers: { Authorization: `Bearer ${accessToken}` } }
     );
     return response;
@@ -84,11 +84,52 @@ export const createUser = async (userID, user) => {
   }
 };
 
-export const createActivities = async (userID, activites) => {
+export const createActivities = async (activites) => {
   try {
-	await setDoc(doc(db, "avengers-challenge/2021/activites", ""+userID), activites);
+    console.log("activities createActivities"+ activites);
+    // Get a new write batch
+    const batch = writeBatch(db);
+    activites.data.map((activity:any) => {
+      // Set the value for Activity
+      const stravaActivity = doc(db, "avengers-challenge/2021/users/"+activity.athlete.id+"/activities",""+activity.id);
+      batch.set(stravaActivity, activity);
+    });
+    // Commit the batch
+    await batch.commit();
     console.log("User Activites created: ");
   } catch (e) {
     console.error("Error adding document: ", e);
   }
+};
+
+export const getUsersFromFirebase = async()=>{
+  return getDocs(collection(db, "avengers-challenge/2021/users"));
+}
+
+export const getUserActivityWithID = async(userID)=>{
+  return getDocs(collection(db, "avengers-challenge/2021/users/"+userID+"/activities"));
+}
+
+export const createLeaderboard = async (user,totalDistance) => {
+  try {
+	await setDoc(doc(db, "avengers-challenge/2021/leaderboard", ""+user.id), {
+    id:user.id,
+    username:user.username,
+    firstname:user.firstname,
+    lastname:user.lastname,
+    profile:user.profile,
+    profile_medium:user.profile,
+    distance:totalDistance,
+    points:"0",
+    team:"Spiderman"
+
+  });
+    console.log("Leaderboard Document written with ID: ");
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+export const getLeadboard = async()=>{
+  return getDocs(collection(db, "avengers-challenge/2021/leaderboard"));
 };

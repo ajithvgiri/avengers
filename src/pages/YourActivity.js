@@ -1,7 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import { collection,  } from "firebase/firestore";
 
 const YourActivity = ({ activity, user }) => {
+  //   querySnapshot.forEach((doc) => {
+  //   // doc.data() is never undefined for query doc snapshots
+  //   console.log(doc.id, " => ", doc.data());
+  // });
+
   return (
     <div>
       <h1>Hi, {user.athlete.firstname} !</h1>

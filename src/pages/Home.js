@@ -3,7 +3,7 @@ import "./css/homev2.css";
 import logo from './images/logo.svg';
 import stravaButton from './images/strava-connect.svg';
 const { REACT_APP_CLIENT_ID } = process.env;
-const redirectUrl = "https://localhost:3000/redirect";
+const redirectUrl = "https://fortpedallerspalakkad.web.app/redirect";
 
 const handleLogin = () => {
   window.location = `http://www.strava.com/oauth/authorize?client_id=${REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=activity:read`;
@@ -141,10 +141,14 @@ const Home = () => {
           </div>
           <div class="l-grid__item">
              <div class="c-card">
-                <div class="c-card__header" hidden>
-                   <h3></h3>
-                   <select class="c-select" hidden>
-                     <option selected="selected">1 - October 31 2021</option>
+                <div class="c-card__header">
+                   <h3>Leaderboard</h3>
+                   <select class="c-select">
+                     <option selected="selected">All</option>
+                     <option>Captain America</option>
+                     <option>Hulk</option>
+                     <option>Ironman</option>
+                     <option>Spiderman</option>
                    </select>
                    </div>
                 <div class="c-card__body">
