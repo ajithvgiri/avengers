@@ -67,6 +67,9 @@ class StravaRedirect extends React.Component {
         console.log("total distance=>",totalDistance);
         await createLeaderboard(tokens.athlete,totalDistance)
         const leaderboard = await getLeadboard()
+				leaderboard.forEach((member) => {
+					console.log("leaderboard from redirect ",member.data().username);
+				});
 				this.props.setActivities(leaderboard);
 				this.props.setUserActivities(user);
 

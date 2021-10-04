@@ -1,126 +1,50 @@
 import React from "react";
+import { connect } from "react-redux";
 import "./css/homev2.css";
 import logo from './images/logo.svg';
 import stravaButton from './images/strava-connect.svg';
 const { REACT_APP_CLIENT_ID } = process.env;
 const redirectUrl = "https://fortpedallerspalakkad.web.app/redirect";
 
+
 const handleLogin = () => {
   window.location = `http://www.strava.com/oauth/authorize?client_id=${REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=activity:read`;
 };
 
-const Home = () => {
+const Home = ({leaderboard}) => {
+  var listItems = ""
+  if (leaderboard != null) {
+    console.log("leaderboard value from firebase ",leaderboard);
+    // listItems = leaderboard.forEach((member) =>{
+    //   console.log("loop get users ",member.data().username);
+    // });
+    listItems = leaderboard.forEach((member) =>
+    <div class="c-list__grid">
+      <div class="c-flag c-place u-bg--transparent">{member.data().id}</div>
+      <div class="c-media">
+        <img class="c-avatar c-media__img" src="{member.data().profile}" />
+        <div class="c-media__content">
+          <div class="c-media__title">{member.data().firstname+" "+member.data().lastname}</div>
+          <a class="c-media__link u-text--small" href="https://strava.com/athlete/{member.data().username}" target="_blank">@{member.data().username}</a>
+        </div>
+      </div>
+      <div class="u-text--right c-kudos">
+        <div class="u-mt--8">
+          <strong>{member.data().distance/1000}</strong> {randomEmoji()}
+        </div>
+      </div>
+    </div>
+    );
+  }
+
+
+  const randomEmoji = () => {
+    const emojis = ['👏', '👍', '🙌', '🤩', '🔥', '⭐️', '🏆', '💯'];
+    let randomNumber = Math.floor(Math.random() * emojis.length);
+    return emojis[randomNumber];
+  };
+
   return (
-    // <div class="wrap">
-    //   <img onClick={handleLogin} class="strava-connect" />
-    //   <div class="inner">
-    //     <div class="trees">
-    //       <div class="left">
-    //         <div class="tree tree-a">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-b">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-c">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-d">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-e">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div class="right">
-    //         <div class="tree tree-a">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-b">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-c">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-d">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //         <div class="tree tree-e">
-    //           <div>
-    //             <i></i>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div class="building">
-    //       <div class="middle"></div>
-    //       <div class="bottom"></div>
-    //       <div class="line"></div>
-    //     </div>
-    //     <div class="clouds">
-    //       <div class="cloud a"></div>
-    //       <div class="cloud b"></div>
-    //     </div>
-    //     <div class="cycling">
-    //       <div class="legs">
-    //         <div class="leg left">
-    //           <i></i>
-    //         </div>
-    //         <div class="leg right">
-    //           <i></i>
-    //         </div>
-    //       </div>
-    //       <div class="main">
-    //         <div class="head">
-    //           <i class="helmet">
-    //             <i class="dtl"></i>
-    //           </i>
-    //           <i class="face">
-    //             <i class="dtl"></i>
-    //           </i>
-    //           <i class="glass"></i>
-    //         </div>
-    //         <div class="chest"></div>
-    //         <div class="hand-wrap">
-    //           <div class="hand left">
-    //             <i class="top"></i>
-    //             <i class="bottom"></i>
-    //           </div>
-    //           <div class="hand right">
-    //             <i class="top"></i>
-    //             <i class="bottom"></i>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div class="bike">
-    //         <div class="wheel"></div>
-    //         <div class="handle-wrap">
-    //           <div class="hand left"></div>
-    //           <div class="hand right"></div>
-    //           <div class="handle"></div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
     <div class="l-wrapper">
        <div class="c-header">
           <img  src={logo} class="c-logo"/>
@@ -142,7 +66,7 @@ const Home = () => {
           <div class="l-grid__item">
              <div class="c-card">
                 <div class="c-card__header">
-                   <h3>Leaderboard</h3>
+                   <h3>Avengers Challenge</h3>
                    <select class="c-select">
                      <option selected="selected">All</option>
                      <option>Captain America</option>
@@ -160,6 +84,7 @@ const Home = () => {
                             <div class="u-text--right u-text--small u-text--medium"># Points</div>
                          </div>
                       </li>
+                      {listItems}
                    </ul>
                 </div>
              </div>
@@ -169,4 +94,10 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    leaderboard: state.activity
+  };
+};
+
+export default connect(mapStateToProps)(Home);;
