@@ -38,6 +38,7 @@ class StravaRedirect extends React.Component {
 
 				// Save the Auth Token to the Store (it's located under 'search' for some reason)
 				const stravaAuthToken = cleanUpAuthToken(location.search);
+				//const stravaAuthToken = "b1b094ad74becb69e8515ea78bba2883c87630f5";
 
 				// Post Request to Strava (with AuthToken) which returns Refresh Token and and Access Token
 				const tokens = await testAuthGetter(stravaAuthToken);
@@ -52,20 +53,26 @@ class StravaRedirect extends React.Component {
 				await createActivities(userActivities);
         const queryActivities = await getUserActivityWithID(userID)
         var totalDistance = 0
+				var points = 0
         queryActivities.forEach((activity) => {
           // doc.data() is never undefined for query doc snapshots
           totalDistance += activity.data().distance
-          console.log(activity.id, " => ", activity.data().distance," =>",
-          activity.data().average_speed," => ",activity.data().elapsed_time,
-          activity.data().manual," => ",activity.data().max_speed,
-          activity.data().moving_time," => ",activity.data().private,
-          activity.data().visibility," => ",activity.data().type,
-          activity.data().start_date_local," => ",activity.data().flagged,
-          activity.data().name
-        );
+					if (activity.data().type == "Ride" &&
+						activity.data().manual == false &&
+						activity.data().flagged == false) {
+							var distanceInKm = activity.data().distance/1000
+							if (distanceInKm >= 30 && distanceInKm < 50) {
+								points += 100
+							}else if(distanceInKm >= 50 && distanceInKm < 100){
+								points += 250
+							}else if(distanceInKm >= 100){
+								points += 600
+							}
+					}
+          console.log(activity.id, " => ", points);
         });
         console.log("total distance=>",totalDistance);
-        await createLeaderboard(tokens.athlete,totalDistance)
+        await createLeaderboard(tokens.athlete,totalDistance,points)
         const leaderboard = await getLeadboard()
 				leaderboard.forEach((member) => {
 					console.log("leaderboard from redirect ",member.data().username);

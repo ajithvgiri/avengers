@@ -2,7 +2,7 @@ import axios from "axios";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, doc, setDoc, writeBatch, query, where, getDocs  } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, writeBatch, query, where, getDocs, orderBy  } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -43,7 +43,7 @@ export const cleanUpAuthToken = (str) => {
 export const testAuthGetter = async (authTok) => {
   try {
     const response = await axios.post(
-      `https://www.strava.com/api/v3/oauth/token?client_id=${REACT_APP_CLIENT_ID}&client_secret=${REACT_APP_CLIENT_SECRET}&code=${authTok}&grant_type=authorization_code&scope=read,write`
+      `https://www.strava.com/api/v3/oauth/token?client_id=${REACT_APP_CLIENT_ID}&client_secret=${REACT_APP_CLIENT_SECRET}&code=${authTok}&response_type=code&grant_type=authorization_code&scope=read,write`
     );
     return response.data;
   } catch (error) {
@@ -110,7 +110,7 @@ export const getUserActivityWithID = async(userID)=>{
   return getDocs(collection(db, "avengers-challenge/2021/users/"+userID+"/activities"));
 }
 
-export const createLeaderboard = async (user,totalDistance) => {
+export const createLeaderboard = async (user,totalDistance,points) => {
   try {
 	await setDoc(doc(db, "avengers-challenge/2021/leaderboard", ""+user.id), {
     id:user.id,
@@ -120,7 +120,7 @@ export const createLeaderboard = async (user,totalDistance) => {
     profile:user.profile,
     profile_medium:user.profile,
     distance:totalDistance,
-    points:"0",
+    points:points,
     team:"Spiderman"
 
   });
@@ -131,5 +131,6 @@ export const createLeaderboard = async (user,totalDistance) => {
 };
 
 export const getLeadboard = async()=>{
-  return getDocs(collection(db, "avengers-challenge/2021/leaderboard"));
+  const q = query(collection(db, "avengers-challenge/2021/leaderboard"), where("points", ">", 0),orderBy("points", "desc"));
+  return getDocs(q);
 };
