@@ -17,7 +17,6 @@ import {
 	getUserActivity,
 	createUser,
 	createActivities,
-  getUsersFromFirebase,
   getUserActivityWithID,
   createLeaderboard,
   getLeadboard
@@ -54,25 +53,93 @@ class StravaRedirect extends React.Component {
         const queryActivities = await getUserActivityWithID(userID)
         var totalDistance = 0
 				var points = 0
+				var team = ""
         queryActivities.forEach((activity) => {
           // doc.data() is never undefined for query doc snapshots
           totalDistance += activity.data().distance
-					if (activity.data().type == "Ride" &&
-						activity.data().manual == false &&
-						activity.data().flagged == false) {
+					if (activity.data().type === "Ride" &&
+						activity.data().manual === false &&
+						activity.data().flagged === false) {
 							var distanceInKm = activity.data().distance/1000
-							if (distanceInKm >= 30 && distanceInKm < 50) {
+							if (distanceInKm >= 28 && distanceInKm < 48) {
 								points += 100
-							}else if(distanceInKm >= 50 && distanceInKm < 100){
+							}else if(distanceInKm >= 48 && distanceInKm < 98){
 								points += 250
-							}else if(distanceInKm >= 100){
+							}else if(distanceInKm >= 98 && distanceInKm < 130){
 								points += 600
+							}else if (distanceInKm >= 130 && distanceInKm < 150){
+								points += 700
+							}else if (distanceInKm >= 150 && distanceInKm < 200) {
+								points += 850
+							}else if(distanceInKm >= 200){
+								points += 1200
 							}
 					}
           console.log(activity.id, " => ", points);
         });
         console.log("total distance=>",totalDistance);
-        await createLeaderboard(tokens.athlete,totalDistance,points)
+
+				// set team
+				const spiderman = [
+					65922603, // satheesh
+					62413423, // ajithvgiri
+					68304466, // partheepan
+					65995278, // swaroop
+					65880425, // ajay
+					69384136, // riju
+					47215811, // ramshad
+					68972677, // sanu
+					50277950, // umar
+					51772417, // anand
+				];
+				const hulk = [
+					50452223, // radhakrishnan
+					33476105, // denny
+					23004210, // nithin
+					7101904, // aravind
+					17940049, //reshma
+					67671990, // deepu devdas
+					67022845, //jibin
+					75064084, // sreejith
+					66701942 // shafeek
+				];
+
+				const captain_america = [
+					72142981, // rivin
+					62326382, // jishnu
+					63859197, // afthab
+					69443369, // drona
+					62362117, // amritha
+					40956538, // suraj
+					72662812, // sulfikar
+					72730690, // shanil
+					65285806, // gowtham s
+				];
+				const ironman = [
+					49763042, // ahammed hussain
+					71856244, // joe
+					71457550, // gowtham t
+					70913181, // abu anas
+					74462853, // gokul g
+					64620208, // rohit
+					79257862, // sunayna
+					48736871, // ashiq ahammed
+					72825921, // buniyamin
+				];
+
+			if (spiderman.includes(tokens.athlete.id)) {
+						team = "Spiderman"
+				}else if (hulk.includes(tokens.athlete.id)) {
+						team = "Hulk"
+				}else if (captain_america.includes(tokens.athlete.id)) {
+						team = "Captain America"
+				}else if (ironman.includes(tokens.athlete.id)) {
+						team = "Ironman"
+				}else {
+						team = "Unknown"
+				}
+
+        await createLeaderboard(tokens.athlete,totalDistance,points,team)
         const leaderboard = await getLeadboard()
 				leaderboard.forEach((member) => {
 					console.log("leaderboard from redirect ",member.data().username);

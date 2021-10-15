@@ -2,6 +2,7 @@ import axios from "axios";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getMessaging, getToken } from "firebase/messaging";
 import { getFirestore, collection, doc, setDoc, writeBatch, query, where, getDocs, orderBy  } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,7 +23,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore();
-
+const messaging = getMessaging();
+getToken(messaging, { vapidKey: 'BJI4y5pNoa5_HomhTr2_XbWUBrDdu3b48Ao_pd9ENize7U1C4dNWbp3986nI-mn1zA7rRifgX-ZP6pzBfdexjfk' }).then((currentToken) => {
+  if (currentToken) {
+    // Send the token to your server and update the UI if necessary
+    // ...
+    console.log("notification toke "+currentToken);
+  } else {
+    // Show permission request UI
+    console.log('No registration token available. Request permission to generate one.');
+    // ...
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+  // ...
+});
 const { REACT_APP_CLIENT_ID, REACT_APP_CLIENT_SECRET } = process.env;
 
 export const getParamValues = (url) => {
@@ -110,7 +125,7 @@ export const getUserActivityWithID = async(userID)=>{
   return getDocs(collection(db, "avengers-challenge/2021/users/"+userID+"/activities"));
 }
 
-export const createLeaderboard = async (user,totalDistance,points) => {
+export const createLeaderboard = async (user,totalDistance,points,team) => {
   try {
 	await setDoc(doc(db, "avengers-challenge/2021/leaderboard", ""+user.id), {
     id:user.id,
@@ -121,7 +136,7 @@ export const createLeaderboard = async (user,totalDistance,points) => {
     profile_medium:user.profile,
     distance:totalDistance,
     points:points,
-    team:"Spiderman"
+    team:team
 
   });
     console.log("Leaderboard Document written with ID: ");

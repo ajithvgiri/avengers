@@ -11,7 +11,7 @@
     "source": "functions"
   },
   "hosting": {
-    "site": "fortpedallerspalakkad",
+    "site": "fortpedallers",
     "public": "build",
     "ignore": [
       "firebase.json",

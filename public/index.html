@@ -31,7 +31,26 @@
        --color: var(--lightest);
        --surface: var(--darker);
        }
-    </style>
+
+            footer {
+              position: fixed;
+                padding: 10px 10px 0px 10px;
+                bottom: 0;
+                width: 100%;
+                /* Height of the footer*/
+                height: 40px;
+                background: var(--darkest);;
+            }
+            p.copyright {
+            position: absolute;
+            width: 100%;
+            color: #fff;
+            line-height: 10px;
+            font-size: 0.8em;
+            text-align: center;
+            bottom:0;
+            }
+         </style>
     <script>
        window.console = window.console || function(t) {};
     </script>
@@ -58,6 +77,9 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <footer>
+     <p class="copyright"> <a href="https://ajithvgiri.com" target="_blank">&#128052</a>hee-haw hee-haw</p>
+  </footer>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

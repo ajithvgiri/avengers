@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { collection,  } from "firebase/firestore";
 
 const YourActivity = ({ activity, user }) => {
   //   querySnapshot.forEach((doc) => {

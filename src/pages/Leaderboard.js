@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 import { connect } from "react-redux";
 import "./css/homev2.css";
 
@@ -9,7 +8,7 @@ import { getLeadboard } from "../utils/functions";
 class LeaderboardRedirect extends React.Component {
   componentDidMount() {
     const authenticate = async () => {
-      const { history, location } = this.props;
+      const { history } = this.props;
       try {
         const leaderboard = await getLeadboard();
         leaderboard.forEach((member) => {
