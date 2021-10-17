@@ -65,14 +65,8 @@ class StravaRedirect extends React.Component {
 								points += 100
 							}else if(distanceInKm >= 48 && distanceInKm < 98){
 								points += 250
-							}else if(distanceInKm >= 98 && distanceInKm < 130){
+							}else if(distanceInKm >= 98){
 								points += 600
-							}else if (distanceInKm >= 130 && distanceInKm < 150){
-								points += 700
-							}else if (distanceInKm >= 150 && distanceInKm < 200) {
-								points += 850
-							}else if(distanceInKm >= 200){
-								points += 1200
 							}
 					}
           console.log(activity.id, " => ", points);
@@ -101,7 +95,8 @@ class StravaRedirect extends React.Component {
 					67671990, // deepu devdas
 					67022845, //jibin
 					75064084, // sreejith
-					66701942 // shafeek
+					66701942, // shafeek
+					74076217, // proshob
 				];
 
 				const captain_america = [
